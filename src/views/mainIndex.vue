@@ -3,6 +3,7 @@
         <iframe ref="iframe" :src="htmlSrc" width="100%" height="100%" frameborder="0">
         </iframe>
     </div>
+
 </template>
 
 <script setup lang="ts">
@@ -13,6 +14,6 @@ const htmlSrc = 'static/index/test.html'
 <style scoped>
 .wrap {
     width: 100%;
-    height: 2200px;
+    height: 1500px;
 }
 </style>

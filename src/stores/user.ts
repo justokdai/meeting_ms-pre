@@ -1,22 +1,26 @@
 import { defineStore } from "pinia";
+import { reactive } from "vue";
 export const useUserStore = defineStore('UserINfo', () => {
     //真正存储数据的地方
-    const user = {
-        user_id: '',
+    const user = reactive({
+        user_id: -1,
         user_name: '',
-        user_password: '',
-        user_age: 0,
+        user_age: -1,
         user_email: '',
         user_tel: '',
-    };
+    });
     function login_out() {
-        user.user_id = '';
+        user.user_id = -1;
         user.user_name = '';
-        user.user_password = '';
-        user.user_age = 0;
+        user.user_age = -1;
         user.user_email = '';
         user.user_tel = ''
     }
-
-    return { user, login_out };
+    function update(user_name: string, user_age: number, user_email: string, user_tel: string) {
+        user.user_name = user_name;
+        user.user_age = user_age;
+        user.user_email = user_email;
+        user.user_tel = user_tel;
+    }
+    return { user, login_out, update };
 });

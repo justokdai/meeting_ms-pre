@@ -1,10 +1,16 @@
 <template>
     <div class="main_UserContent" style="height: 100%">
-        <el-button @click="login_dialogFormVisible = true" v-if="user_id === ''" type="primary">登录</el-button>
-        <div v-else class="main_UserLogined">
-            <el-icon :size="30">
-                <User />
-            </el-icon>
+        <el-button @click="login_dialogFormVisible = true" v-show="!userInfo_visiblo" type="primary">登录</el-button>
+        <div v-show="userInfo_visiblo" class="main_UserLogined">
+            <el-popover placement="bottom" :width="400" trigger="hover">
+                <template #reference>
+                    <el-icon :size="30">
+                        <User />
+                    </el-icon>
+                </template>
+                <userInfoView></userInfoView>
+            </el-popover>
+
             <el-button @click="loginout" style="margin-left: 10px;" type="primary">退出</el-button>
         </div>
     </div>
@@ -67,30 +73,17 @@ import { ElIcon } from 'element-plus';
 import { useUserStore } from '@/stores/user'
 import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus'
-const userInfo = useUserStore().user;
-const user_id = userInfo.user_id;
+import { user_login } from '@/api/userApi';
+import userInfoView from '@/components/userInfoView.vue'
+import { useTokenStore } from '@/stores/token';
+import type { ApiResponse } from '@/interfaces/result';
+const userStore = useUserStore();
+const tokenStore = useTokenStore();
+const userInfo = userStore.user;
 const login_dialogFormVisible = ref(false)
 const register_dialogFormVisible = ref(false)
+const userInfo_visiblo = ref(false);
 const formLabelWidth = '140px'
-function loginout() {
-    //将状态钟大哥用户置为空
-    useUserStore().login_out();
-}
-function register() {
-
-    ElMessage({
-        message: '注册成功，请登录',
-        type: 'success',
-    })
-    register_dialogFormVisible.value = false;
-    login_dialogFormVisible.value = true;
-}
-function login() {
-    ElMessage({
-        message: '登录成功',
-        type: 'success',
-    })
-}
 const login_form = reactive({
     username: '',
     password: ''
@@ -102,6 +95,54 @@ const register_form = reactive({
     email: '',
     tel: ''
 })
+function loginout() {
+    //将状态中用户置为空
+    userStore.login_out();
+    userInfo_visiblo.value = false;
+    tokenStore.setnull;
+}
+
+function register() {
+
+    ElMessage({
+        message: '注册成功，请登录',
+        type: 'success',
+    })
+    register_dialogFormVisible.value = false;
+    login_dialogFormVisible.value = true;
+}
+
+
+async function login() {
+    try {
+        const response = await user_login(login_form.username, login_form.password) as unknown as ApiResponse;
+        if (response.code === 0) {
+            ElMessage.error(response.msg)
+        }
+        else {
+            // 在这里可以处理登录成功后的逻辑
+            ElMessage({
+                message: '登录成功',
+                type: 'success',
+            })
+            login_dialogFormVisible.value = false;
+            console.log(response);
+            userInfo.user_id = response.data.userId;
+            userInfo.user_name = response.data.userName;
+            userInfo.user_age = response.data.userAge;
+            userInfo.user_email = response.data.userEmail;
+            userInfo.user_tel = response.data.userTel;
+            userInfo_visiblo.value = true;
+            tokenStore.token = response.data.token;
+        }
+
+    } catch (err) {
+        // error.value = 'Login failed. Please check your credentials.';
+        // console.error('Login error:', err);
+    }
+
+}
+
 
 </script>
 
