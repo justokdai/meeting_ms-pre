@@ -12,7 +12,7 @@ import mainUser from './components/mainUser.vue';
         <div class="common-layout" style="height: 100%;">
           <el-container style="height: 100%;">
             <!-- 这里是Logo区 -->
-            <el-aside width="200px">
+            <el-aside width="400px" style="   display: flex; align-items: center; justify-content: center;">
               <mainLogo></mainLogo>
             </el-aside>
             <!-- 这里是 导航栏区 -->
@@ -20,9 +20,9 @@ import mainUser from './components/mainUser.vue';
               <RouterLink to="/index" class="sub">首页</RouterLink>
               <RouterLink to="/rental" class="sub">会议室预定</RouterLink>
               <RouterLink to="/approval" class="sub">会议室审批情况</RouterLink>
-              <RouterLink to="/aboutus" class="sub">关于我们</RouterLink>
-              <el-link href="http://localhost:5174/" type="primary">管理员入口</el-link>
+              <RouterLink to="/aboutus" class="sub">联系我们</RouterLink>
             </el-main>
+            <el-link style="width: 100px;" href="http://localhost:5174/" type="primary">管理员入口</el-link>
             <!-- 这里是用户头像，也就是用户信息展示区 -->
             <el-aside width="150px">
               <mainUser></mainUser>
@@ -34,7 +34,7 @@ import mainUser from './components/mainUser.vue';
         <RouterView></RouterView>
       </el-main>
       <el-footer>
-        <mainFooter></mainFooter>
+        <!-- <mainFooter></mainFooter> -->
       </el-footer>
     </el-container>
   </div>
@@ -50,7 +50,49 @@ import mainUser from './components/mainUser.vue';
   /* 如果需要垂直居中 */
 }
 
+.el-header {
+  background: rgb(238, 243, 245);
+}
+
+.navigate {
+  display: flex;
+  justify-content: center;
+  /* 使导航项居中 */
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
 .navigate .sub {
-  width: 200px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-right: 10px;
+  /* 减小导航项之间的间距 */
+  padding: 10px 15px;
+  /* 控制导航项的内边距，影响宽度 */
+  text-decoration: none;
+  text-align: center;
+}
+
+.navigate .sub:hover {
+  color: #409eff;
+  text-decoration: underline;
+}
+
+.navigate .admin-link {
+  font-size: 16px;
+  color: #fff;
+  background-color: #409eff;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.navigate .admin-link:hover {
+  background-color: #66b1ff;
+}
+
+.navigate .sub {
+  width: 150px;
 }
 </style>

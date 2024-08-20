@@ -42,3 +42,18 @@ export const user_updatePassword = (userId: number, oldPassword: string, newPass
         throw error;
     }
 }
+export const user_register = (userName: string, userPassword: string, userAge: number, userEmail: string, userTel: string) => {
+    try {
+        const response = http.post('/user/register', {
+            userName: userName,
+            userPassword: userPassword,
+            userAge: userAge,
+            userEmail: userEmail,
+            userTel: userTel
+        });
+        return response;
+    } catch (error) {
+        console.log("用户注册失败", error);
+        throw error;
+    }
+}

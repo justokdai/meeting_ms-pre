@@ -1,9 +1,18 @@
 <template>
-    <a>这里是关于我们</a>
+    <div class="wrap">
+        <iframe ref="iframe" :src="htmlSrc" width="100%" height="100%" frameborder="0">
+        </iframe>
+    </div>
 </template>
 
 <script setup lang="ts">
-
+// 指定要加载的 HTML 文件路径（相对于 public 目录）
+const htmlSrc = 'static/html/index.html'
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrap {
+    width: 100%;
+    height: 1500px;
+}
+</style>

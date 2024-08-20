@@ -16,10 +16,10 @@
     </div>
     <el-dialog v-model="login_dialogFormVisible" title="用户登录" width="500">
         <el-form :model="login_form">
-            <el-form-item label="账号" :label-width="formLabelWidth">
+            <el-form-item label="账号:" :label-width="formLabelWidth">
                 <el-input v-model="login_form.username" autocomplete="off" />
             </el-form-item>
-            <el-form-item label="密码" :label-width="formLabelWidth">
+            <el-form-item label="密码:" :label-width="formLabelWidth">
                 <el-input v-model="login_form.password" autocomplete="off" />
             </el-form-item>
         </el-form>
@@ -30,7 +30,7 @@
         </div> -->
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="login_dialogFormVisible = false">Cancel</el-button>
+                <el-button @click="login_dialogFormVisible = false">取消</el-button>
                 <el-button type="primary" @click="login">
                     登录
                 </el-button>
@@ -46,13 +46,13 @@
                 <el-input v-model="register_form.password" autocomplete="off" />
             </el-form-item>
             <el-form-item label="年龄" :label-width="formLabelWidth">
-                <el-input v-model="register_form.password" autocomplete="off" />
+                <el-input v-model="register_form.age" autocomplete="off" />
             </el-form-item>
             <el-form-item label="邮箱" :label-width="formLabelWidth">
-                <el-input v-model="register_form.password" autocomplete="off" />
+                <el-input v-model="register_form.email" autocomplete="off" />
             </el-form-item>
             <el-form-item label="电话" :label-width="formLabelWidth">
-                <el-input v-model="register_form.password" autocomplete="off" />
+                <el-input v-model="register_form.tel" autocomplete="off" />
             </el-form-item>
 
         </el-form>
@@ -73,7 +73,7 @@ import { ElIcon } from 'element-plus';
 import { useUserStore } from '@/stores/user'
 import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus'
-import { user_login } from '@/api/userApi';
+import { user_login, user_register } from '@/api/userApi';
 import userInfoView from '@/components/userInfoView.vue'
 import { useTokenStore } from '@/stores/token';
 import type { ApiResponse } from '@/interfaces/result';
@@ -102,14 +102,40 @@ function loginout() {
     tokenStore.setnull;
 }
 
-function register() {
+async function register() {
+    if (register_form.username === '') {
+        ElMessage.error("账号不能为空");
+        return;
+    }
+    if (register_form.password === '') {
+        ElMessage.error("密码不能为空");
+        return;
+    }
+    if (register_form.age === 0) {
+        ElMessage.error("年龄不能为0");
+        return;
+    }
+    if (register_form.email === '') {
+        ElMessage.error("邮箱不能为空");
+        return;
+    }
+    if (register_form.tel === '') {
+        ElMessage.error("电话不能为空");
+        return;
+    }
 
-    ElMessage({
-        message: '注册成功，请登录',
-        type: 'success',
-    })
-    register_dialogFormVisible.value = false;
-    login_dialogFormVisible.value = true;
+    try {
+        const response = await user_register(register_form.username, register_form.password, register_form.age, register_form.email, register_form.tel) as unknown as ApiResponse;
+        ElMessage({
+            message: '注册成功，请登录',
+            type: 'success',
+        })
+        register_dialogFormVisible.value = false;
+        login_dialogFormVisible.value = true;
+    } catch (err) {
+        ElMessage.error('注册失败')
+    }
+
 }
 
 

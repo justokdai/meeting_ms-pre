@@ -1,20 +1,23 @@
 <template>
     <div class="block">
-        <span class="demonstration">选择时间</span>
-        <el-date-picker v-model="pickTime" type="date" placeholder="Pick a day" size="default" />
+        <span class="demonstration" style="color:blue;">请选择时间</span>
+        <el-date-picker v-model="pickTime" type="date" placeholder="选择日期" size="default" />
     </div>
-    <el-table :data="allMeetingRoom" style="width: 100%" empty-text="请先登录！！">
-        <el-table-column prop="meetingroomId" label="会议室号" width="180" />
-        <el-table-column prop="meetingroomSize" label="会议室大小" width="180" />
-        <el-table-column prop="meetingroomHeadname" label="会议室负责人" />
-        <el-table-column fixed="right" label="操作" min-width="120">
-            <template #default="scope">
-                <el-button link type="primary" size="small" @click="chooseTime(scope.row)">
-                    选择时间
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+
+    <div class="table-container">
+        <el-table :data="allMeetingRoom" style="width: 100%;" empty-text="请先登录！！">
+            <el-table-column prop="meetingroomId" label="会议室号" width="180" />
+            <el-table-column prop="meetingroomSize" label="会议室大小" width="180" />
+            <el-table-column prop="meetingroomHeadname" label="会议室负责人" />
+            <el-table-column fixed="right" label="操作" min-width="120">
+                <template #default="scope">
+                    <el-button link type="primary" size="small" @click="chooseTime(scope.row)">
+                        选择时间
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
 
 
     <el-dialog v-model="chooseTimeFormVisible" title="选择租用时间" width="1000">
@@ -156,3 +159,119 @@ async function fetchRentalInfo() {
     }
 }
 </script>
+<style scoped>
+.block {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.block .demonstration {
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 10px;
+    color: #333;
+}
+
+.el-date-picker {
+    margin-top: 10px;
+}
+
+.el-table {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.el-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #555;
+}
+
+.el-table-column {
+    padding: 12px;
+}
+
+.el-button {
+    font-weight: bold;
+}
+
+.el-button[type="primary"] {
+    background-color: #409eff;
+    border-color: #409eff;
+    color: white;
+    border-radius: 4px;
+}
+
+.el-button[type="primary"]:hover {
+    background-color: #66b1ff;
+    border-color: #66b1ff;
+}
+
+.el-button[link] {
+    text-decoration: underline;
+    color: #409eff;
+}
+
+.el-button[link]:hover {
+    color: #66b1ff;
+}
+
+/* 容器样式 */
+.table-container {
+    display: flex;
+    justify-content: center;
+    /* 水平居中 */
+    padding: 20px;
+    /* 内边距 */
+    background-color: #ffffff;
+    /* 背景颜色 */
+    border-radius: 10px;
+    /* 圆角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* 阴影 */
+    margin: 20px auto;
+    /* 外边距，自动水平居中 */
+    max-width: 1400px;
+    /* 最大宽度 */
+}
+
+/* 表格样式 */
+.el-table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 表头样式 */
+.el-table th {
+    color: #ffffff;
+    background-color: #409eff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid #e6e6e6;
+}
+
+.el-table th .cell {
+    font-family: 'Arial', sans-serif;
+}
+
+/* 表格行样式 */
+.el-table td {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+.el-table tr:hover td {
+    background-color: #f0f9ff;
+}
+</style>
