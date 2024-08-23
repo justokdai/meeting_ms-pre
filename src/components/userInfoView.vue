@@ -103,7 +103,7 @@ async function edit_userInfo() {
         type: 'success',
     });
     userStore.update(edit_form.user_name, edit_form.user_age, edit_form.user_email, edit_form.user_tel);
-    editUser_visiable.value = false;
+    // editUser_visiable.value = false;
 }
 async function updatePassword() {
     const response = await user_updatePassword(userInfo.user_id, updatePassword_visiable_form.oldPassword, updatePassword_visiable_form.newPassword) as unknown as ApiResponse;
@@ -112,9 +112,9 @@ async function updatePassword() {
             message: '密码修改成功',
             type: 'success',
         });
-        updatePassword_visiable.value = false;
-        updatePassword_visiable_form.newPassword = '';
-        updatePassword_visiable_form.oldPassword = '';
+        // updatePassword_visiable.value = false;
+        // updatePassword_visiable_form.newPassword = '';
+        // updatePassword_visiable_form.oldPassword = '';
     } else {
         ElMessage.error("输入的旧密码错误");
     }

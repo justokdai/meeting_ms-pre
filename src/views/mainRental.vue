@@ -30,13 +30,15 @@
                         </div>
                     </template>
                     <div style="display: flex; justify-content: center; align-items: center;">
-                        <a v-if="!rentaled_times[index]">空闲</a>
-                        <a v-if="rentaled_times[index]">已被占用</a>
+                        <a v-if="rentaled_times[index - 1]">已被占用</a>
+                        <a v-else>空闲</a>
                     </div>
                     <template #footer>
-                        <el-button v-if="!rentaled_times[index]" type="primary"
-                            @click="chooseDescriptionVisible = true, choosed_time = index">预定会议室</el-button>
-                        <el-button v-if="rentaled_times[index]" type="info">预定会议室</el-button>
+                        <el-button v-if="!rentaled_times[index - 1]" type="primary"
+                            @click="chooseDescriptionVisible = true, choosed_time = index">
+                            预定会议室
+                        </el-button>
+                        <el-button v-else type="info" disabled>预定会议室</el-button>
                     </template>
                 </el-card>
             </div>
@@ -119,8 +121,10 @@ async function chooseTime(row: any) {
         return;
     }
     choosed_room.value = row;
-    chooseTimeFormVisible.value = true;
+    console.log(row);
     fetchRentalInfo();
+    chooseTimeFormVisible.value = true;
+
 }
 async function confirmchooseTime() {
     if (chooseDescription.value === '') {
@@ -149,10 +153,12 @@ async function fetchRentalInfo() {
         if (pickTime.value === null)
             return;//显然这不可能  先写着
         const localDateString = pickTime.value.toLocaleDateString('en-CA'); // "2024-08-15"
+        console.log(choosed_room.value.meetingroomId);
 
-        const response = await getRentalInfo_request(localDateString, userInfo.user_id) as unknown as ApiResponse;
-        console.log(response.data);
-        rentaled_times.value = response.data;
+        const response = await getRentalInfo_request(localDateString, choosed_room.value.meetingroomId) as unknown as ApiResponse;
+        rentaled_times.value = response.data.rentaledList;
+        console.log(rentaled_times.value);
+
         // 假设响应的数据格式符合表格所需的格式
     } catch (error) {
         console.error("获取会议室信息失败", error);
